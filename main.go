@@ -64,6 +64,9 @@ func pullDockerImage(imageName string) (imgName *string, err error) {
 	if err != nil {
 		return nil, err
 	}
+	if _, err = io.Copy(os.Stdout, res); err != nil {
+		return nil, fmt.Errorf("failed to read response body: %v", err)
+	}
 	defer res.Close()
 	return &imageName, nil
 }
