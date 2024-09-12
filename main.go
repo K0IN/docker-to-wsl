@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
@@ -124,7 +125,10 @@ func importWsl(distroName string) (err error) {
 		return err
 	}
 
-	cmd := exec.Command("wsl", "--import", distroName, ".", "image.tar", "--version", "2")
+	var re = regexp.MustCompile(`~[\p{L}0-9\s]+`)
+	escapedPath := re.ReplaceAllString(distroName, `-`)
+
+	cmd := exec.Command("wsl", "--import", distroName, fmt.Sprintf("./%s", escapedPath), "image.tar", "--version", "2")
 	_, err = cmd.Output()
 	if err != nil {
 		return wsllib.WslRegisterDistribution(distroName, path)
@@ -133,8 +137,8 @@ func importWsl(distroName string) (err error) {
 	return nil
 }
 
-func launchWsl() (err error) {
-	_, err = wsllib.WslLaunchInteractive("DistroName", "", true)
+func launchWsl(distroName string) (err error) {
+	_, err = wsllib.WslLaunchInteractive(distroName, "", true)
 	return err
 }
 
@@ -196,9 +200,10 @@ func main() {
 
 			fmt.Printf("Successfully imported %s to WSL\n", *img)
 			fmt.Printf("Run `wsl -d %s` to launch the distribution\n", distroName)
+			fmt.Printf("Run `wsl --unregister %s` to remove the distribution and files\n", distroName)
 
 			if c.Bool("launch") {
-				err = launchWsl()
+				err = launchWsl(distroName)
 				if err != nil {
 					return fmt.Errorf("failed to launch WSL: %v", err)
 				}
