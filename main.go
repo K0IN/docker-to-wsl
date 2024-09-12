@@ -28,7 +28,8 @@ func buildDocker(dockerFilePath string) (imageName *string, err error) {
 	}
 	defer apiClient.Close()
 
-	fullPath, err := filepath.Abs(dockerFilePath)
+	fullPath, err := filepath.Abs(filepath.Dir(dockerFilePath))
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to get dockerfile path: %v", err)
 	}
