@@ -124,9 +124,8 @@ func importWsl(distroName string) (err error) {
 	}
 
 	cmd := exec.Command("wsl", "--import", distroName, ".", "image.tar", "--version", "2")
-	res, err := cmd.Output()
+	_, err = cmd.Output()
 	if err != nil {
-		fmt.Printf("failed to import WSL: %v, %s\n", err, string(res))
 		return wsllib.WslRegisterDistribution(distroName, path)
 	}
 
