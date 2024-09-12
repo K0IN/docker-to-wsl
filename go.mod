@@ -1,4 +1,4 @@
-module github.com/k0in/wsl-docker/v2
+module github.com/k0in/docker-to-wsl/v2
 
 go 1.22
 
