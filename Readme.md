@@ -12,6 +12,12 @@ Docker to WSL is a tool that converts Docker images into WSL distributions. This
 
 ### Steps
 
+```
+go install github.com/k0in/docker-to-wsl/v2@
+```
+
+OR
+
 1. Clone the repository:
     ```
     git clone https://github.com/K0IN/docker-to-wsl.git
