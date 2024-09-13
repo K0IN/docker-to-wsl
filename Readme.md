@@ -1,6 +1,6 @@
 # Docker to WSL
 
-Docker to WSL is a tool that converts Docker images into WSL distributions. 
+Docker to WSL is a tool that converts Docker images into WSL distributions.
 This project allows you to build or pull Docker images and then import them into WSL for further use.
 
 ## Why
@@ -31,20 +31,22 @@ This is a Windows only app.
 
 ### Steps
 
-```
+```bash
 go install github.com/k0in/docker-to-wsl/v2@main
 ```
 
 OR
 
 1. Clone the repository:
-    ```
+
+    ```bash
     git clone https://github.com/K0IN/docker-to-wsl.git
     cd docker-to-wsl
     ```
 
 2. Install the tool:
-    ```
+
+    ```bash
     go install
     ```
 
@@ -53,33 +55,39 @@ OR
 - `--distro-name`: Set the name for the new WSL distribution (required)
 - `--image`: Specify a Docker image to pull and convert or if a local file is specified, it will be built
 - `--launch`: Launch the new WSL distribution after creation
+- `--set-default`: Set the new WSL distribution as the default
+- `--start-menu`: Add the new WSL distribution to the Start Menu (you can find the distro in the Start Menu / windows search)
 - `--help`: Show help information
 
 ### Building and Importing a Dockerfile
 
 1. Create a Dockerfile in your current directory.
 2. Run the tool:
-    ```
+
+    ```bash
     docker-to-wsl --distro-name myDistro
     ```
 
 ### Pulling and Importing a Docker Image
 
 1. Run the tool:
-    ```
+
+    ```bash
     docker-to-wsl --image <docker-image-name> --distro-name myDistro
     ```
 
 ### Launching the WSL Distribution
 
 1. Add the `--launch` flag to the command:
-    ```
+
+    ```bash
     docker-to-wsl --image <docker-image-name> --distro-name myDistro --launch
     ```
 
 ## Dependencies and Licensing
 
 This project requires the following dependencies:
+
 - [Docker](https://github.com/docker/docker)
 - [Opencontainers Image Spec](https://github.com/opencontainers/image-spec)
 - [urfave/cli](https://github.com/urfave/cli)
@@ -109,18 +117,6 @@ then run:
 ```bash
 docker-to-wsl --distro-name myDistro
 wsl -d myDistro
-```
-
-## Add your distro to the start menu (optional)
-
-Please fill in <>
-
-```powershell
-$WScriptShell = New-Object -ComObject WScript.Shell
-$Shortcut = $WScriptShell.CreateShortcut("$env:APPDATA\Microsoft\Windows\Start Menu\Programs\<stat-menu-name>.lnk")
-$Shortcut.TargetPath = "wsl.exe"
-$Shortcut.Arguments = "-d <dist-name>"
-$Shortcut.Save()
 ```
 
 ## Complex example
@@ -153,6 +149,6 @@ RUN echo "k0in ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 # install packages
 RUN apt-get install -y wget git vim nano openssh-client clang gcc g++ make cmake gdb python3 python3-pip python3-venv
 
-# example you can use x11 apps :)
+# example you can use x11 apps :) - if you have wslg enabled
 RUN apt-get install -y x11-apps
 ```

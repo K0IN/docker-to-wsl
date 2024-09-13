@@ -16,6 +16,7 @@ import (
 	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/client"
 	"github.com/docker/docker/pkg/archive"
+	"github.com/jxeng/shortcut"
 	v1 "github.com/opencontainers/image-spec/specs-go/v1"
 	"github.com/urfave/cli"
 	"github.com/yuk7/wsllib-go"
@@ -137,6 +138,34 @@ func importWsl(distroName string) (err error) {
 	return nil
 }
 
+func setDefaultWsl(distroName string) (err error) {
+	cmd := exec.Command("wsl", "--set-default", distroName)
+	_, err = cmd.Output()
+	return err
+}
+
+func addToStartMenu(distroName string) (err error) {
+	appData, exists := os.LookupEnv("APPDATA")
+	if !exists {
+		return fmt.Errorf("APPDATA environment variable not found")
+	}
+	programsPath := filepath.Join(appData,
+		"Microsoft", "Windows", "Start Menu", "Programs",
+		fmt.Sprintf("%s.lnk", distroName))
+
+	sc := shortcut.Shortcut{
+		ShortcutPath:     programsPath,
+		Target:           "wsl.exe",
+		Arguments:        fmt.Sprintf("-d %s", distroName),
+		IconLocation:     "%SystemRoot%\\System32\\SHELL32.dll,0",
+		Description:      "",
+		Hotkey:           "",
+		WindowStyle:      "1",
+		WorkingDirectory: "",
+	}
+	return shortcut.Create(sc)
+}
+
 func launchWsl(distroName string) (err error) {
 	_, err = wsllib.WslLaunchInteractive(distroName, "", true)
 	return err
@@ -160,6 +189,14 @@ func main() {
 			&cli.BoolFlag{
 				Name:  "launch",
 				Usage: "Launch the WSL distribution after importing",
+			},
+			&cli.BoolFlag{
+				Name:  "set-default",
+				Usage: "Set the distribution as the default",
+			},
+			&cli.BoolFlag{
+				Name:  "start-menu",
+				Usage: "Add the distribution to the Start Menu",
 			},
 		},
 		Action: func(c *cli.Context) error {
@@ -201,6 +238,20 @@ func main() {
 			fmt.Printf("Successfully imported %s to WSL\n", *img)
 			fmt.Printf("Run `wsl -d %s` to launch the distribution\n", distroName)
 			fmt.Printf("Run `wsl --unregister %s` to remove the distribution and files\n", distroName)
+
+			if c.Bool("set-default") {
+				err = setDefaultWsl(distroName)
+				if err != nil {
+					fmt.Printf("failed to set distro as default: %v\n", err)
+				}
+			}
+
+			if c.Bool("start-menu") {
+				err = addToStartMenu(distroName)
+				if err != nil {
+					fmt.Printf("failed to add to Start Menu: %v\n", err)
+				}
+			}
 
 			if c.Bool("launch") {
 				err = launchWsl(distroName)
