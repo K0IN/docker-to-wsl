@@ -156,7 +156,7 @@ func addToStartMenu(distroName string) (err error) {
 	sc := shortcut.Shortcut{
 		ShortcutPath:     programsPath,
 		Target:           "wsl.exe",
-		Arguments:        fmt.Sprintf("-d %s", distroName),
+		Arguments:        fmt.Sprintf("~ -d %s", distroName),
 		IconLocation:     "%SystemRoot%\\System32\\SHELL32.dll,0",
 		Description:      "",
 		Hotkey:           "",
