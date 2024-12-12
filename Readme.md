@@ -97,7 +97,9 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Quick start
 
-Example Dockerfile (you can change this as you like):
+There is a example setup in the [example](example) directory.
+
+Simple example Dockerfile:
 
 ```Dockerfile
 # example image
