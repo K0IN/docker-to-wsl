@@ -5,7 +5,8 @@ go 1.22
 toolchain go1.22.7
 
 require (
-	github.com/docker/docker v27.2.1+incompatible
+	github.com/docker/docker v28.0.0+incompatible
+	github.com/jxeng/shortcut v1.0.2
 	github.com/opencontainers/image-spec v1.1.0
 	github.com/urfave/cli v1.22.15
 	github.com/yuk7/wsllib-go v1.0.0
@@ -24,7 +25,6 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/jxeng/shortcut v1.0.2 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/moby/docker-image-spec v1.3.1 // indirect
 	github.com/moby/patternmatcher v0.6.0 // indirect
